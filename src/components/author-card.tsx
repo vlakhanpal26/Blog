@@ -26,8 +26,8 @@ export function AuthorCard({ name, website }: AuthorCardProps) {
         </div>
       </div>
       <p className="mt-5 text-sm leading-7 text-neutral-700">
-        I write about quiet mornings, emotional clarity, and building a life that feels personal. Most essays
-        come from notes I leave for myself.
+        xyz placeholder author description. You can replace this with your real bio, tone, and social links when
+        you are ready.
       </p>
     </aside>
   );

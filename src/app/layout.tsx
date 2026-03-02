@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const lora = Lora({ subsets: ['latin'], variable: '--font-lora' });
 
 export const metadata: Metadata = {
-  title: 'Morning Pages',
+  title: 'Life of xyz',
   description: 'A personal editorial lifestyle blog.'
 };
 
