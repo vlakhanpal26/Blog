@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { formatDate, type Post } from '@/lib/posts';
+import { formatDate } from '@/lib/date';
+import type { Post } from '@/lib/post-types';
 
 type PostCardProps = {
   post: Post;

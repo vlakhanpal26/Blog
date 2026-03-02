@@ -1,24 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
+import type { Post, PostFrontmatter } from '@/lib/post-types';
+export type { Post, PostFrontmatter } from '@/lib/post-types';
+export { formatDate } from '@/lib/date';
 
 const POSTS_DIR = path.join(process.cwd(), 'content/posts');
-
-export type PostFrontmatter = {
-  title: string;
-  excerpt: string;
-  date: string;
-  category: string;
-  author: string;
-  authorWebsite: string;
-  coverImage: string;
-  tagline: string;
-};
-
-export type Post = PostFrontmatter & {
-  slug: string;
-  content: string;
-};
 
 function sortPosts(posts: Post[]) {
   return posts.sort((a, b) => {
@@ -79,12 +66,4 @@ export function getAdjacentPosts(slug: string) {
 
 export function getCategories() {
   return Array.from(new Set(getAllPosts().map((post) => post.category)));
-}
-
-export function formatDate(date: string) {
-  return new Intl.DateTimeFormat('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  }).format(new Date(date));
 }

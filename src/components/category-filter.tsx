@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { PostCard } from '@/components/post-card';
-import type { Post } from '@/lib/posts';
+import type { Post } from '@/lib/post-types';
 
 type CategoryFilterProps = {
   posts: Post[];
