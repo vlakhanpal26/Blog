@@ -1,0 +1,90 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
+
+const POSTS_DIR = path.join(process.cwd(), 'content/posts');
+
+export type PostFrontmatter = {
+  title: string;
+  excerpt: string;
+  date: string;
+  category: string;
+  author: string;
+  authorWebsite: string;
+  coverImage: string;
+  tagline: string;
+};
+
+export type Post = PostFrontmatter & {
+  slug: string;
+  content: string;
+};
+
+function sortPosts(posts: Post[]) {
+  return posts.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+}
+
+export function getAllPosts(): Post[] {
+  const filenames = fs.readdirSync(POSTS_DIR);
+  const posts = filenames
+    .filter((file) => file.endsWith('.mdx'))
+    .map((filename) => {
+      const slug = filename.replace(/\.mdx$/, '');
+      const filePath = path.join(POSTS_DIR, filename);
+      const raw = fs.readFileSync(filePath, 'utf-8');
+      const { data, content } = matter(raw);
+
+      return {
+        ...(data as PostFrontmatter),
+        slug,
+        content
+      };
+    });
+
+  return sortPosts(posts);
+}
+
+export function getPostBySlug(slug: string): Post | null {
+  const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
+
+  if (!fs.existsSync(filePath)) {
+    return null;
+  }
+
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  const { data, content } = matter(raw);
+
+  return {
+    ...(data as PostFrontmatter),
+    slug,
+    content
+  };
+}
+
+export function getAdjacentPosts(slug: string) {
+  const posts = getAllPosts();
+  const index = posts.findIndex((post) => post.slug === slug);
+
+  if (index === -1) {
+    return { previous: null, next: null };
+  }
+
+  return {
+    previous: posts[index + 1] ?? null,
+    next: posts[index - 1] ?? null
+  };
+}
+
+export function getCategories() {
+  return Array.from(new Set(getAllPosts().map((post) => post.category)));
+}
+
+export function formatDate(date: string) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  }).format(new Date(date));
+}
